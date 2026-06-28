@@ -1,0 +1,96 @@
+/* Custom CSS for this template */
+/* Add your custom styles here */
+
+/* ── SmartCharts font-size baseline fix ────────────────────────────────────
+   SmartCharts' entire CSS was authored against Deriv's platform which sets
+   html { font-size: 62.5% } (1rem = 1em = 10px globally).
+   Our app uses the browser default (1rem = 1em = 16px), so every em-based
+   dimension (font sizes, padding, margins, widths, line-heights) renders
+   60% larger than intended.
+
+   Setting font-size: 62.5% on the SmartChart root element re-anchors ALL
+   `em` units back to 10px in a single rule — no need to override dozens of
+   individual properties.  `rem` units still resolve against the HTML root
+   so those need a few targeted px overrides below.                         */
+#rise-fall-chart {
+  font-size: 62.5%; /* 62.5% × 16px = 10px → matches Deriv's platform baseline */
+}
+
+/* ── rem-based overrides ────────────────────────────────────────────────────
+   `rem` always resolves against the HTML root (16px here, 10px on dtrader),
+   so the fix above does not help them.  Each value below is (original × 10px).  */
+
+/* Symbol-select button info block: 4.2rem→42px, 15rem→150px */
+.cq-chart-title .cq-symbol-select-btn .cq-symbol-info {
+  min-height: 42px;
+  min-width: 150px;
+}
+
+/* Symbol name right-padding: 1rem→10px */
+.cq-chart-title .cq-symbol-select-btn .cq-symbol {
+  padding-right: 10px;
+}
+
+/* Symbol-search input inside the market-change dropdown: 1.4rem→14px */
+.sc-search-input > input {
+  font-size: 14px;
+}
+
+/* Drawing tools mobile dialog category header: 1rem→10px */
+.smartcharts-mobile .sc-dialog--tabular .sc-dtools__category__head {
+  padding-left: 10px;
+}
+
+/* Drawing/deletion toast notifications (position:fixed, outside #rise-fall-chart):
+   min-height: 3rem→30px; padding: .5rem .5rem .5rem 1rem → 5px 5px 5px 10px */
+.sc-drawing-toast,
+.sc-deletion-snackbar {
+  min-height: 30px;
+  padding: 5px 5px 5px 10px;
+  gap: 5px;
+  border-radius: 5px;
+}
+
+/* Move navigation widget closer to the bottom of the chart.
+   The library hardcodes bottom: 80px — no media query needed since
+   the widget is already hidden on mobile via the library's own styles. */
+.sc-navigation-widget {
+  bottom: 30px;
+}
+
+/* Fix icon alignment within navigation widget buttons.
+   The library sets line-height: 41px on a 32px-tall icon box which can
+   misalign SVG icons — switching to flex centering corrects this.
+   No media query needed: the navigation widget is hidden on mobile. */
+.sc-navigation-widget__item .ic-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Basket/composite symbol icons: the library relies on text-align:center to
+   center the SVG inside .ic-icon, but SVG renders as a block element so
+   text-align has no effect. Use flex centering to fix the alignment. */
+.ic-wld > span:last-child,
+.ic-frx > span:last-child,
+.ic-otc > span:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+/* Mobile: move the SmartCharts toolbar widget to the bottom of the chart.
+   The library hard-codes top: 102px which lands mid-chart on short viewports. */
+@media (max-width: 1023px) {
+  .sc-toolbar-widget {
+    top: auto !important;
+    bottom: 8px !important;
+  }
+
+  /* Remove horizontal padding on the chart canvas so it uses full width on small screens. */
+  .smartcharts-mobile .ciq-chart {
+    padding: 0;
+  }
+}
